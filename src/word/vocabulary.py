@@ -44,3 +44,16 @@ class Vocab:
         if isinstance(indices, (list, tuple)):
             return [self.to_tokens(i) for i in indices]
         return self.idx_to_token[indices]
+
+    def save(self, path):
+        """把词表保存到文件，每行一个词，顺序即编号"""
+        with open(path, 'w', encoding='utf-8') as f:
+            for token in self.idx_to_token:
+                f.write(token + '\n')
+
+    @classmethod
+    def load(cls, path):
+        """从文件加载词表，恢复 <pad>/<unk> 和编号顺序"""
+        with open(path, encoding='utf-8') as f:
+            tokens = [line.strip() for line in f if line.strip()]
+        return cls(reserved_tokens=tokens[2:], min_freq=0)
