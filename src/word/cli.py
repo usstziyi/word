@@ -1,6 +1,5 @@
 from word.vocabulary import Vocab
 from word.tokenizer import tokenizer
-from word.LLM import LLM
 
 
 def main():
