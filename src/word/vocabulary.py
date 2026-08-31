@@ -1,9 +1,10 @@
 class Vocab:
     """词表：建立词→编号的映射，支持 <pad> 和 <unk>"""
+    # 特殊标记定义为类属性，实例与 load 类方法共用
+    pad, unk = '<pad>', '<unk>'
 
     def __init__(self, tokens=None, min_freq=1, reserved_tokens=None):
         # 特殊标记统一放在最前面，索引从 0 开始
-        self.unk, self.pad = '<unk>', '<pad>'
         # list[str]
         self.idx_to_token = [self.pad, self.unk] # ['<pad>', '<unk>', ...]
         # dict[str, int]
@@ -56,4 +57,12 @@ class Vocab:
         """从文件加载词表，恢复 <pad>/<unk> 和编号顺序"""
         with open(path, encoding='utf-8') as f:
             tokens = [line.strip() for line in f if line.strip()]
-        return cls(reserved_tokens=tokens[2:], min_freq=0)
+
+        # 校验文件头部是 <pad>、<unk>，避免编号错位
+        if tokens[:2] != [cls.pad, cls.unk]:
+            raise ValueError(f"词表文件头部应为 {cls.pad}、{cls.unk}，当前为 {tokens[:2]}")
+
+        vocab = cls()  # 先建默认 [<pad>, <unk>]
+        vocab.idx_to_token = tokens
+        vocab.token_to_idx = {token: i for i, token in enumerate(tokens)}
+        return vocab
