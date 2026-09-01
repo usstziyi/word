@@ -1,3 +1,5 @@
+"""演示脚本：加载词表与模型，用 Embedding 层把编号变成词向量。"""
+
 import torch
 from word.LLM import LLM
 from word.vocabulary import Vocab
@@ -11,17 +13,14 @@ model.eval()
 indices = torch.tensor([vocab['time'], vocab['machine'], vocab['<pad>']],
                        dtype=torch.long)
 
-
 # 3. 前向：输出每个 token 的向量
 with torch.no_grad():
-    # 一维
-    indices = torch.tensor([vocab['time'], vocab['machine'], vocab['<pad>']],
-                       dtype=torch.long)
+    # 一维（列表）
     vecs = model(indices)   # shape: [3, 8]
     print(vecs.shape)
 
-    # 一维
-    vec = model(torch.tensor([vocab['time']], dtype=torch.long))  # shape: [8]
+    # 一维（单元素）
+    vec = model(torch.tensor([vocab['time']], dtype=torch.long))  # shape: [1, 8]
     print(vec.shape)
 
     # 标量
