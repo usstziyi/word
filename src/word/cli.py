@@ -1,8 +1,11 @@
-from word.vocabulary import Vocab
+"""演示脚本：分词 → 建词表 → 查表 → 保存/加载词表。"""
+
 from word.tokenizer import tokenizer
+from word.vocabulary import Vocab
 
 
-def main():
+def main() -> None:
+    """运行完整流程演示。"""
 
     with open('src/book/input.txt', encoding='utf-8') as f:
         lines = [line.strip() for line in f if line.strip()]
